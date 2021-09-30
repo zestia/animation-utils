@@ -1,6 +1,6 @@
 {
   "name": "@zestia/animation-utils",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "description": "Basic utils for dealing with animations & transitions",
   "scripts": {
     "test": "ava && npm run lint:js",
