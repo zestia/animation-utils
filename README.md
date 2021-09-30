@@ -4,7 +4,8 @@ Utils for working with animations and transitions.
 
 ## waitForAnimation
 
-Accepts an `element`, and optionally an `animationName`. Returns a promise that will resolve when the animation ends.
+Accepts an `element`, and optionally an `animationName`.
+Returns a promise that will resolve when the animation ends.
 
 ### Examples
 
@@ -18,7 +19,8 @@ await waitForAnimation(myElement, 'fade-in');
 
 ## waitForTransition
 
-Accepts an `element`, and optionally an `propertyName`. Returns a promise that will resolve when the transition ends.
+Accepts an `element`, and optionally an `propertyName`.
+Returns a promise that will resolve when the transition ends.
 
 ### Examples
 
