@@ -13,7 +13,7 @@
     "url": "https://github.com/zestia/animation-utils.git"
   },
   "engines": {
-    "node": ">= 8"
+    "node": ">= 14"
   },
   "ava": {
     "require": [
