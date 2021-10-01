@@ -1,39 +1,26 @@
-export function waitForTransition(element, propertyName) {
-  return new Promise((resolve) => {
-    function handler(event) {
-      if (element !== event.target) {
-        return;
-      }
+export async function waitForAnimation(element, options = {}) {
+  await waitForFrame();
 
-      if (propertyName && propertyName !== event.propertyName) {
-        return;
-      }
-
-      element.removeEventListener('transitionend', handler);
-      resolve();
-    }
-
-    element.addEventListener('transitionend', handler);
-  });
-}
-
-export function waitForAnimation(element, animationName) {
-  return new Promise((resolve) => {
-    function handler(event) {
-      if (element !== event.target) {
-        return;
-      }
-
-      if (animationName && animationName !== event.animationName) {
-        return;
-      }
-
-      element.removeEventListener('animationend', handler);
-      resolve();
-    }
-
-    element.addEventListener('animationend', handler);
-  });
+  await Promise.all(
+    element
+      .getAnimations({
+        subtree: options.subtree
+      })
+      .filter((animation) => {
+        if (options.transitionProperty) {
+          return animation.transitionProperty === options.transitionProperty;
+        } else if (options.animationName) {
+          return animation.animationName === options.animationName;
+        } else {
+          return true;
+        }
+      })
+      .map((animation) => {
+        return animation.finished.catch(() => {
+          // squelch aborted animations
+        });
+      })
+  );
 }
 
 export function waitForFrame() {
