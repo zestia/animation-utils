@@ -19,7 +19,7 @@ await waitForAnimation(myElement, 'fade-in');
 
 ## waitForTransition
 
-Accepts an `element`, and optionally an `propertyName`.
+Accepts an `element`, and optionally a `propertyName`.
 Returns a promise that will resolve when the transition ends.
 
 ### Examples
