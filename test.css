@@ -1,0 +1,52 @@
+#qunit-fixture {
+  position: static;
+}
+
+#test-parent {
+  position: absolute;
+  background-color: red;
+  width: 100px;
+  height: 100px;
+  transition-property: margin-left, transform;
+  transition-duration: 500ms;
+  animation-duration: 500ms;
+}
+
+#test-child {
+  position: absolute;
+  background-color: blue;
+  width: 50px;
+  height: 50px;
+  transition-property: margin-left, transform;
+  transition-duration: 250ms;
+  animation-duration: 250ms;
+}
+
+.animate {
+  animation-name: move-right, move-down;
+}
+
+.transition {
+  margin-left: 100px;
+  transform: translateY(100px);
+}
+
+@keyframes move-right {
+  from {
+    margin-left: 0;
+  }
+
+  to {
+    margin-left: 100px;
+  }
+}
+
+@keyframes move-down {
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(100px);
+  }
+}
