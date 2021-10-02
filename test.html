@@ -107,6 +107,27 @@
     const { test, module } = QUnit;
     const { isArray } = Array;
 
+    function assertAnimated(type) {
+      const types = new WeakMap();
+      types.set(CSSAnimation, 'animationName');
+      types.set(CSSTransition, 'transitionProperty');
+
+      return function (actual, expected) {
+        this.pushResult({
+          result: actual.reduce((result, current, index) => {
+            return (
+              result &&
+              current.playState === 'finished' &&
+              current[types.get(type)] === expected[index]
+            );
+          }, actual.length === expected.length)
+        });
+      };
+    }
+
+    QUnit.assert.animated = assertAnimated(CSSAnimation);
+    QUnit.assert.transitioned = assertAnimated(CSSTransition);
+
     module('waitForAnimation', function (hooks) {
       hooks.beforeEach(async function () {
         this.parent = document.getElementById('test-parent');
@@ -118,25 +139,17 @@
       });
 
       test('css animations', async function (assert) {
-        assert.expect(7);
+        assert.expect(1);
 
         this.parent.classList.add('animate');
 
         const animations = await waitForAnimation(this.parent);
 
-        assert.equal(animations.length, 2);
-
-        assert.true(animations[0] instanceof CSSAnimation);
-        assert.equal(animations[0].animationName, 'move-right');
-        assert.equal(animations[0].playState, 'finished');
-
-        assert.true(animations[1] instanceof CSSAnimation);
-        assert.equal(animations[1].animationName, 'move-down');
-        assert.equal(animations[1].playState, 'finished');
+        assert.animated(animations, ['move-right', 'move-down']);
       });
 
       test('a specific css animation', async function (assert) {
-        assert.expect(4);
+        assert.expect(1);
 
         this.parent.classList.add('animate');
 
@@ -144,37 +157,21 @@
           animationName: 'move-down'
         });
 
-        assert.equal(animations.length, 1);
-
-        assert.true(animations[0] instanceof CSSAnimation);
-        assert.equal(animations[0].animationName, 'move-down');
-        assert.equal(animations[0].playState, 'finished');
+        assert.animated(animations, ['move-down']);
       });
 
       test('css transitions', async function (assert) {
-        assert.expect(7);
-
-        await waitForFrame();
+        assert.expect(1);
 
         this.parent.classList.add('transition');
 
         const animations = await waitForAnimation(this.parent);
 
-        assert.equal(animations.length, 2);
-
-        assert.true(animations[0] instanceof CSSTransition);
-        assert.equal(animations[0].transitionProperty, 'margin-left');
-        assert.equal(animations[0].playState, 'finished');
-
-        assert.true(animations[1] instanceof CSSTransition);
-        assert.equal(animations[1].transitionProperty, 'transform');
-        assert.equal(animations[1].playState, 'finished');
+        assert.transitioned(animations, ['margin-left', 'transform']);
       });
 
       test('a specific css transition', async function (assert) {
-        assert.expect(4);
-
-        await waitForFrame();
+        assert.expect(1);
 
         this.parent.classList.add('transition');
 
@@ -182,14 +179,11 @@
           transitionProperty: 'transform'
         });
 
-        assert.equal(animations.length, 1);
-        assert.true(animations[0] instanceof CSSTransition);
-        assert.equal(animations[0].transitionProperty, 'transform');
-        assert.equal(animations[0].playState, 'finished');
+        assert.transitioned(animations, ['transform']);
       });
 
       test('js animations', async function (assert) {
-        assert.expect(3);
+        assert.expect(1);
 
         this.parent.animate(
           [
@@ -203,13 +197,11 @@
 
         const animations = await waitForAnimation(this.parent);
 
-        assert.equal(animations.length, 1);
-        assert.equal(animations[0].animationName, undefined);
-        assert.equal(animations[0].playState, 'finished');
+        assert.animated(animations, [undefined]);
       });
 
       test('child animations', async function (assert) {
-        assert.expect(7);
+        assert.expect(1);
 
         this.child.classList.add('animate');
 
@@ -217,19 +209,11 @@
           subtree: true
         });
 
-        assert.equal(animations.length, 2);
-
-        assert.true(animations[0] instanceof CSSAnimation);
-        assert.equal(animations[0].animationName, 'move-right');
-        assert.equal(animations[0].playState, 'finished');
-
-        assert.true(animations[1] instanceof CSSAnimation);
-        assert.equal(animations[1].animationName, 'move-down');
-        assert.equal(animations[1].playState, 'finished');
+        assert.animated(animations, ['move-right', 'move-down']);
       });
 
       test('a specific child animation', async function (assert) {
-        assert.expect(4);
+        assert.expect(1);
 
         this.child.classList.add('animate');
 
@@ -238,14 +222,11 @@
           animationName: 'move-down'
         });
 
-        assert.equal(animations.length, 1);
-        assert.true(animations[0] instanceof CSSAnimation);
-        assert.equal(animations[0].animationName, 'move-down');
-        assert.equal(animations[0].playState, 'finished');
+        assert.animated(animations, ['move-down']);
       });
 
       test('a specific child transition', async function (assert) {
-        assert.expect(4);
+        assert.expect(1);
 
         this.child.classList.add('transition');
 
@@ -254,14 +235,11 @@
           transitionProperty: 'transform'
         });
 
-        assert.equal(animations.length, 1);
-        assert.true(animations[0] instanceof CSSTransition);
-        assert.equal(animations[0].transitionProperty, 'transform');
-        assert.equal(animations[0].playState, 'finished');
+        assert.transitioned(animations, ['transform']);
       });
 
       test('multiple animations', async function (assert) {
-        assert.expect(17);
+        assert.expect(1);
 
         this.parent.classList.add('animate');
         this.child.classList.add('animate');
@@ -270,26 +248,12 @@
           subtree: true
         });
 
-        assert.equal(animations.length, 4);
-        assert.true(animations[0] instanceof CSSAnimation);
-        assert.equal(animations[0].animationName, 'move-right');
-        assert.equal(animations[0].playState, 'finished');
-        assert.deepEqual(animations[0].effect.target, this.parent);
-
-        assert.true(animations[1] instanceof CSSAnimation);
-        assert.equal(animations[1].animationName, 'move-down');
-        assert.equal(animations[1].playState, 'finished');
-        assert.deepEqual(animations[1].effect.target, this.parent);
-
-        assert.true(animations[2] instanceof CSSAnimation);
-        assert.equal(animations[2].animationName, 'move-right');
-        assert.equal(animations[2].playState, 'finished');
-        assert.deepEqual(animations[2].effect.target, this.child);
-
-        assert.true(animations[3] instanceof CSSAnimation);
-        assert.equal(animations[3].animationName, 'move-down');
-        assert.equal(animations[3].playState, 'finished');
-        assert.deepEqual(animations[3].effect.target, this.child);
+        assert.animated(animations, [
+          'move-right',
+          'move-down',
+          'move-right',
+          'move-down'
+        ]);
       });
 
       test('aborted transitions', async function (assert) {
@@ -315,7 +279,7 @@
 
         const animations = await promise;
 
-        assert.equal(animations.length, 2);
+        assert.animated(animations, ['move-right', 'move-down']);
       });
 
       test('animation not started yet (does not use events system)', async function (assert) {
@@ -329,7 +293,7 @@
 
         const animations = await promise;
 
-        assert.equal(animations.length, 0);
+        assert.animated(animations, []);
       });
 
       test('no animation does not result in a never ending promise', async function (assert) {
@@ -338,7 +302,7 @@
 
         const animations = await waitForAnimation(this.parent);
 
-        assert.equal(animations.length, 0);
+        assert.animated(animations, []);
       });
 
       test('thenable', function (assert) {
@@ -347,7 +311,7 @@
         this.parent.classList.add('animate');
 
         return waitForAnimation(this.parent).then((animations) => {
-          assert.equal(animations[0].animationName, 'move-right');
+          assert.animated(animations, ['move-right', 'move-down']);
         });
       });
     });
