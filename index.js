@@ -1,4 +1,6 @@
-export function waitForAnimation(element, options = {}) {
+export async function waitForAnimation(element, options = {}) {
+  await waitForFrame();
+
   return Promise.all(
     element
       .getAnimations({
@@ -20,7 +22,9 @@ export function waitForAnimation(element, options = {}) {
           // squelch aborted animations
         });
       })
-  );
+  ).then((animations) => {
+    console.log(animations);
+  });
 }
 
 export function waitForFrame() {

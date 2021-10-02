@@ -69,7 +69,9 @@
   </style>
 
   <script>
-    function waitForAnimation(element, options = {}) {
+    async function waitForAnimation(element, options = {}) {
+      await waitForFrame();
+
       return Promise.all(
         element
           .getAnimations({
@@ -272,7 +274,7 @@
         await promise;
       });
 
-      test('animation not started yet (does not use events system)', async function (assert) {
+      test('animation not started yet', async function (assert) {
         assert.expect(1);
 
         const promise = waitForAnimation(this.parent);
@@ -280,6 +282,29 @@
         this.parent.classList.add('animate');
 
         const animations = await promise;
+
+        assert.equal(animations.length, 2);
+      });
+
+      test('animation not started yet (does not use events system)', async function (assert) {
+        assert.expect(1);
+
+        const promise = waitForAnimation(this.parent);
+
+        setTimeout(() => {
+          this.parent.classList.add('animate');
+        }, 100);
+
+        const animations = await promise;
+
+        assert.equal(animations.length, 0);
+      });
+
+      test('no animation does not result in a never ending promise', async function (assert) {
+        assert.expect(1);
+        assert.timeout(1000);
+
+        const animations = await waitForAnimation(this.parent);
 
         assert.equal(animations.length, 0);
       });
