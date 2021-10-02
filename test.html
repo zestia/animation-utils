@@ -107,26 +107,31 @@
     const { test, module } = QUnit;
     const { isArray } = Array;
 
-    function assertAnimated(type) {
-      const types = new WeakMap();
-      types.set(CSSAnimation, 'animationName');
-      types.set(CSSTransition, 'transitionProperty');
-
-      return function (actual, expected) {
-        this.pushResult({
-          result: actual.reduce((result, current, index) => {
-            return (
-              result &&
-              current.playState === 'finished' &&
-              current[types.get(type)] === expected[index]
-            );
-          }, actual.length === expected.length)
-        });
-      };
+    function keyForAnimation(animation) {
+      return animation instanceof CSSAnimation
+        ? 'animationName'
+        : 'transitionProperty';
     }
 
-    QUnit.assert.animated = assertAnimated(CSSAnimation);
-    QUnit.assert.transitioned = assertAnimated(CSSTransition);
+    QUnit.assert.animated = function (actual, expected) {
+      this.pushResult({
+        result: actual.reduce((result, animation, index) => {
+          return (
+            result &&
+            animation.playState === 'finished' &&
+            animation.effect.target === expected[index][0] &&
+            animation[keyForAnimation(animation)] === expected[index][1]
+          );
+        }, actual.length === expected.length),
+
+        expected: actual.map((animation) => {
+          return [
+            animation.effect.target,
+            animation[keyForAnimation(animation)]
+          ];
+        })
+      });
+    };
 
     module('waitForAnimation', function (hooks) {
       hooks.beforeEach(async function () {
@@ -145,7 +150,10 @@
 
         const animations = await waitForAnimation(this.parent);
 
-        assert.animated(animations, ['move-right', 'move-down']);
+        assert.animated(animations, [
+          [this.parent, 'move-right'],
+          [this.parent, 'move-down']
+        ]);
       });
 
       test('a specific css animation', async function (assert) {
@@ -157,7 +165,7 @@
           animationName: 'move-down'
         });
 
-        assert.animated(animations, ['move-down']);
+        assert.animated(animations, [[this.parent, 'move-down']]);
       });
 
       test('css transitions', async function (assert) {
@@ -167,7 +175,10 @@
 
         const animations = await waitForAnimation(this.parent);
 
-        assert.transitioned(animations, ['margin-left', 'transform']);
+        assert.animated(animations, [
+          [this.parent, 'margin-left'],
+          [this.parent, 'transform']
+        ]);
       });
 
       test('a specific css transition', async function (assert) {
@@ -179,7 +190,7 @@
           transitionProperty: 'transform'
         });
 
-        assert.transitioned(animations, ['transform']);
+        assert.animated(animations, [[this.parent, 'transform']]);
       });
 
       test('js animations', async function (assert) {
@@ -197,7 +208,7 @@
 
         const animations = await waitForAnimation(this.parent);
 
-        assert.animated(animations, [undefined]);
+        assert.animated(animations, [[this.parent, undefined]]);
       });
 
       test('child animations', async function (assert) {
@@ -209,7 +220,10 @@
           subtree: true
         });
 
-        assert.animated(animations, ['move-right', 'move-down']);
+        assert.animated(animations, [
+          [this.child, 'move-right'],
+          [this.child, 'move-down']
+        ]);
       });
 
       test('a specific child animation', async function (assert) {
@@ -222,7 +236,7 @@
           animationName: 'move-down'
         });
 
-        assert.animated(animations, ['move-down']);
+        assert.animated(animations, [[this.child, 'move-down']]);
       });
 
       test('a specific child transition', async function (assert) {
@@ -235,24 +249,24 @@
           transitionProperty: 'transform'
         });
 
-        assert.transitioned(animations, ['transform']);
+        assert.animated(animations, [[this.child, 'transform']]);
       });
 
       test('multiple animations', async function (assert) {
         assert.expect(1);
 
+        this.child.classList.add('transition');
         this.parent.classList.add('animate');
-        this.child.classList.add('animate');
 
         const animations = await waitForAnimation(this.parent, {
           subtree: true
         });
 
         assert.animated(animations, [
-          'move-right',
-          'move-down',
-          'move-right',
-          'move-down'
+          [this.child, 'margin-left'],
+          [this.child, 'transform'],
+          [this.parent, 'move-right'],
+          [this.parent, 'move-down']
         ]);
       });
 
@@ -279,7 +293,10 @@
 
         const animations = await promise;
 
-        assert.animated(animations, ['move-right', 'move-down']);
+        assert.animated(animations, [
+          [this.parent, 'move-right'],
+          [this.parent, 'move-down']
+        ]);
       });
 
       test('animation not started yet (does not use events system)', async function (assert) {
@@ -311,7 +328,10 @@
         this.parent.classList.add('animate');
 
         return waitForAnimation(this.parent).then((animations) => {
-          assert.animated(animations, ['move-right', 'move-down']);
+          assert.animated(animations, [
+            [this.parent, 'move-right'],
+            [this.parent, 'move-down']
+          ]);
         });
       });
     });
