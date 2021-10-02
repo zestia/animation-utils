@@ -158,7 +158,7 @@
         assert.equal(animations[0].playState, 'finished');
       });
 
-      test('a specific css transitions', async function (assert) {
+      test('a specific css transition', async function (assert) {
         assert.expect(4);
 
         await waitForFrame();
@@ -223,6 +223,22 @@
         assert.equal(animations.length, 1);
         assert.true(animations[0] instanceof CSSAnimation);
         assert.equal(animations[0].animationName, 'move-down');
+        assert.equal(animations[0].playState, 'finished');
+      });
+
+      test('a specific child transition', async function (assert) {
+        assert.expect(4);
+
+        this.child.classList.add('transition');
+
+        const animations = await waitForAnimation(this.parent, {
+          subtree: true,
+          transitionProperty: 'transform'
+        });
+
+        assert.equal(animations.length, 1);
+        assert.true(animations[0] instanceof CSSTransition);
+        assert.equal(animations[0].transitionProperty, 'transform');
         assert.equal(animations[0].playState, 'finished');
       });
 
