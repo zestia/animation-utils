@@ -6,9 +6,9 @@ const {
 
 module('waitForAnimation', function (hooks) {
   hooks.beforeEach(async function () {
-    this.parent = document.getElementById('test-parent');
+    this.element = document.getElementById('test-element');
     this.child = document.getElementById('test-child');
-    this.parent.className = '';
+    this.element.className = '';
     this.child.className = '';
 
     await waitForFrame();
@@ -17,57 +17,57 @@ module('waitForAnimation', function (hooks) {
   test('css animations', async function (assert) {
     assert.expect(1);
 
-    this.parent.classList.add('animate');
+    this.element.classList.add('animate');
 
-    const animations = await waitForAnimation(this.parent);
+    const animations = await waitForAnimation(this.element);
 
     assert.animated(animations, [
-      '#test-parent → move-right',
-      '#test-parent → move-down'
+      '#test-element → move-right',
+      '#test-element → move-down'
     ]);
   });
 
   test('a specific css animation', async function (assert) {
     assert.expect(1);
 
-    this.parent.classList.add('animate');
+    this.element.classList.add('animate');
 
-    const animations = await waitForAnimation(this.parent, {
+    const animations = await waitForAnimation(this.element, {
       animationName: 'move-down'
     });
 
-    assert.animated(animations, ['#test-parent → move-down']);
+    assert.animated(animations, ['#test-element → move-down']);
   });
 
   test('css transitions', async function (assert) {
     assert.expect(1);
 
-    this.parent.classList.add('transition');
+    this.element.classList.add('transition');
 
-    const animations = await waitForAnimation(this.parent);
+    const animations = await waitForAnimation(this.element);
 
     assert.animated(animations, [
-      '#test-parent → margin-left',
-      '#test-parent → transform'
+      '#test-element → margin-left',
+      '#test-element → transform'
     ]);
   });
 
   test('a specific css transition', async function (assert) {
     assert.expect(1);
 
-    this.parent.classList.add('transition');
+    this.element.classList.add('transition');
 
-    const animations = await waitForAnimation(this.parent, {
+    const animations = await waitForAnimation(this.element, {
       transitionProperty: 'transform'
     });
 
-    assert.animated(animations, ['#test-parent → transform']);
+    assert.animated(animations, ['#test-element → transform']);
   });
 
   test('js animations', async function (assert) {
     assert.expect(1);
 
-    this.parent.animate(
+    this.element.animate(
       [
         { marginLeft: 0, transform: 'translateY(0px)' },
         { marginLeft: '100px', transform: 'translateY(100px)' }
@@ -77,9 +77,9 @@ module('waitForAnimation', function (hooks) {
       }
     );
 
-    const animations = await waitForAnimation(this.parent);
+    const animations = await waitForAnimation(this.element);
 
-    assert.animated(animations, ['#test-parent']);
+    assert.animated(animations, ['#test-element']);
   });
 
   test('child animations', async function (assert) {
@@ -87,7 +87,7 @@ module('waitForAnimation', function (hooks) {
 
     this.child.classList.add('animate');
 
-    const animations = await waitForAnimation(this.parent, {
+    const animations = await waitForAnimation(this.element, {
       subtree: true
     });
 
@@ -102,7 +102,7 @@ module('waitForAnimation', function (hooks) {
 
     this.child.classList.add('animate');
 
-    const animations = await waitForAnimation(this.parent, {
+    const animations = await waitForAnimation(this.element, {
       subtree: true,
       animationName: 'move-down'
     });
@@ -115,7 +115,7 @@ module('waitForAnimation', function (hooks) {
 
     this.child.classList.add('transition');
 
-    const animations = await waitForAnimation(this.parent, {
+    const animations = await waitForAnimation(this.element, {
       subtree: true,
       transitionProperty: 'transform'
     });
@@ -126,31 +126,31 @@ module('waitForAnimation', function (hooks) {
   test('multiple animations', async function (assert) {
     assert.expect(1);
 
-    this.parent.classList.add('animate');
+    this.element.classList.add('animate');
     this.child.classList.add('transition');
 
-    const animations = await waitForAnimation(this.parent, {
+    const animations = await waitForAnimation(this.element, {
       subtree: true
     });
 
     assert.animated(animations, [
       '#test-child → margin-left',
       '#test-child → transform',
-      '#test-parent → move-right',
-      '#test-parent → move-down'
+      '#test-element → move-right',
+      '#test-element → move-down'
     ]);
   });
 
   test('aborted transitions', async function (assert) {
     assert.expect(0);
 
-    this.parent.classList.add('transition');
+    this.element.classList.add('transition');
 
-    const promise = waitForAnimation(this.parent);
+    const promise = waitForAnimation(this.element);
 
     await waitForFrame();
 
-    this.parent.classList.remove('transition');
+    this.element.classList.remove('transition');
 
     await promise;
   });
@@ -158,25 +158,25 @@ module('waitForAnimation', function (hooks) {
   test('animation not started yet', async function (assert) {
     assert.expect(1);
 
-    const promise = waitForAnimation(this.parent);
+    const promise = waitForAnimation(this.element);
 
-    this.parent.classList.add('animate');
+    this.element.classList.add('animate');
 
     const animations = await promise;
 
     assert.animated(animations, [
-      '#test-parent → move-right',
-      '#test-parent → move-down'
+      '#test-element → move-right',
+      '#test-element → move-down'
     ]);
   });
 
   test('animation not started yet (does not use events system)', async function (assert) {
     assert.expect(1);
 
-    const promise = waitForAnimation(this.parent);
+    const promise = waitForAnimation(this.element);
 
     setTimeout(() => {
-      this.parent.classList.add('animate');
+      this.element.classList.add('animate');
     }, 100);
 
     const animations = await promise;
@@ -188,7 +188,7 @@ module('waitForAnimation', function (hooks) {
     assert.expect(1);
     assert.timeout(1000);
 
-    const animations = await waitForAnimation(this.parent);
+    const animations = await waitForAnimation(this.element);
 
     assert.animated(animations, []);
   });
@@ -196,12 +196,12 @@ module('waitForAnimation', function (hooks) {
   test('thenable', function (assert) {
     assert.expect(1);
 
-    this.parent.classList.add('animate');
+    this.element.classList.add('animate');
 
-    return waitForAnimation(this.parent).then((animations) => {
+    return waitForAnimation(this.element).then((animations) => {
       assert.animated(animations, [
-        '#test-parent → move-right',
-        '#test-parent → move-down'
+        '#test-element → move-right',
+        '#test-element → move-down'
       ]);
     });
   });

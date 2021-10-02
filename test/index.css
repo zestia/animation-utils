@@ -2,7 +2,7 @@
   position: static;
 }
 
-#test-parent {
+#test-element {
   position: absolute;
   background-color: red;
   width: 100px;
