@@ -210,6 +210,22 @@
         assert.equal(animations[0].playState, 'finished');
       });
 
+      test('a specific child animation', async function (assert) {
+        assert.expect(4);
+
+        this.child.classList.add('animate');
+
+        const animations = await waitForAnimation(this.parent, {
+          subtree: true,
+          animationName: 'move-down'
+        });
+
+        assert.equal(animations.length, 1);
+        assert.true(animations[0] instanceof CSSAnimation);
+        assert.equal(animations[0].animationName, 'move-down');
+        assert.equal(animations[0].playState, 'finished');
+      });
+
       test('multiple animations', async function (assert) {
         assert.expect(7);
 
