@@ -12,11 +12,9 @@ await waitForAnimation(element);
 await waitForAnimation(element, { subtree: true });
 
 // Wait for a specific animation to end
-// (Assuming it has started already, or will start in the on frame)
 await waitForAnimation(myElement, { animationName: 'fade-out' });
 
 // Wait for a specific transition to end
-// (Assuming it has started already, or will start in the on frame)
 await waitForAnimation(myElement, { transitionProperty: 'margin-left' });
 ```
 
