@@ -211,8 +211,6 @@
       test('aborted transitions', async function (assert) {
         assert.expect(0);
 
-        await waitForFrame();
-
         this.parent.classList.add('transition1');
 
         const promise = waitForAnimation(this.parent);
