@@ -23,7 +23,7 @@ await waitForAnimation(myElement, { transitionProperty: 'margin-left' });
 ## waitForFrame
 
 ```javascript
-// Ensure that changing the styles triggers a transition
+// Ensure the styles are changed in the next paint
 element.style.maxHeight = 100;
 await waitForFrame();
 element.style.maxHeight = 0;
