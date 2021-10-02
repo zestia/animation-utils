@@ -2,7 +2,7 @@
 <meta charset="utf-8" />
 <title>Test Suite</title>
 <link rel="stylesheet" href="/node_modules/qunit/qunit/qunit.css" />
-<link rel="stylesheet" href="/node_modules/qunit/qunit/test.css" />
+<link rel="stylesheet" href="/test/index.css" />
 <body>
   <div id="qunit"></div>
 
@@ -14,6 +14,7 @@
 
   <script src="/testem.js"></script>
   <script src="/node_modules/qunit/qunit/qunit.js"></script>
-  <script src="/test.js"></script>
+  <script type="module" src="/test/assertions.js"></script>
+  <script type="module" src="/test/index.js"></script>
   <script>Testem.hookIntoTestFramework();</script>
 </body>

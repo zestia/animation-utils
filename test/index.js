@@ -1,62 +1,10 @@
-const { test } = QUnit;
+import { waitForAnimation, waitForFrame } from '../index.js';
 
- async function waitForAnimation(element, options = {}) {
-  await waitForFrame();
+const {
+  QUnit: { module, test }
+} = window;
 
-  return Promise.all(
-    element
-      .getAnimations({
-        subtree: options.subtree
-      })
-      .filter((animation) => {
-        if (options.transitionProperty) {
-          return animation.transitionProperty === options.transitionProperty;
-        }
-
-        if (options.animationName) {
-          return animation.animationName === options.animationName;
-        }
-
-        return true;
-      })
-      .map((animation) => {
-        return animation.finished.catch(() => {
-          // squelch aborted animations
-        });
-      })
-  );
-}
-
- function waitForFrame() {
-  return new Promise(window.requestAnimationFrame);
-}
-
-
-function keyForAnimation(animation) {
-  const id = animation.effect.target.getAttribute('id');
-
-  const prop =
-    animation[
-      animation instanceof CSSAnimation ? 'animationName' : 'transitionProperty'
-    ];
-
-  return prop ? `#${id} → ${prop}` : `#${id}`;
-}
-
-QUnit.assert.animated = function (actual, expected) {
-  this.pushResult({
-    expected: actual.map(keyForAnimation),
-    result: actual.reduce((result, animation, index) => {
-      return (
-        result &&
-        animation.playState === 'finished' &&
-        keyForAnimation(animation) === expected[index]
-      );
-    }, actual.length === expected.length)
-  });
-};
-
-QUnit.module('waitForAnimation', function (hooks) {
+module('waitForAnimation', function (hooks) {
   hooks.beforeEach(async function () {
     this.parent = document.getElementById('test-parent');
     this.child = document.getElementById('test-child');

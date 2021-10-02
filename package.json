@@ -2,9 +2,8 @@
   "name": "@zestia/animation-utils",
   "version": "2.0.0",
   "description": "Basic utils for dealing with animations & transitions",
-  "type": "module",
   "scripts": {
-    "test": "npm run lint:js",
+    "test": "npm run lint:js && testem ci",
     "lint:js": "eslint .",
     "prettier": "prettier . --write",
     "release": "release-it"
