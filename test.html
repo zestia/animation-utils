@@ -22,8 +22,6 @@
       background-color: red;
       width: 100px;
       height: 100px;
-      position: absolute;
-      transition: transform 500ms;
     }
 
     #test-child {
@@ -32,16 +30,21 @@
       height: 50px;
     }
 
-    .animation1 {
-      animation: move-right 500ms;
+    #test-parent,
+    #test-child {
+      position: absolute;
+      transition-property: margin-left, transform;
+      transition-duration: 500ms;
+      animation-duration: 500ms;
     }
 
-    .animation2 {
-      animation: move-right 500ms, move-down 500ms;
+    .animate {
+      animation-name: move-right, move-down;
     }
 
-    .transition1 {
-      transform: translateX(100px);
+    .transition {
+      margin-left: 100px;
+      transform: translateY(100px);
     }
 
     @keyframes move-right {
@@ -113,13 +116,28 @@
       test('css animations', async function (assert) {
         assert.expect(4);
 
-        this.parent.classList.add('animation1');
+        this.parent.classList.add('animate');
 
         const animations = await waitForAnimation(this.parent);
 
-        assert.equal(animations.length, 1);
+        assert.equal(animations.length, 2);
         assert.true(animations[0] instanceof CSSAnimation);
         assert.equal(animations[0].animationName, 'move-right');
+        assert.equal(animations[0].playState, 'finished');
+      });
+
+      test('a specific css animation', async function (assert) {
+        assert.expect(4);
+
+        this.parent.classList.add('animate');
+
+        const animations = await waitForAnimation(this.parent, {
+          animationName: 'move-down'
+        });
+
+        assert.equal(animations.length, 1);
+        assert.true(animations[0] instanceof CSSAnimation);
+        assert.equal(animations[0].animationName, 'move-down');
         assert.equal(animations[0].playState, 'finished');
       });
 
@@ -128,9 +146,26 @@
 
         await waitForFrame();
 
-        this.parent.classList.add('transition1');
+        this.parent.classList.add('transition');
 
         const animations = await waitForAnimation(this.parent);
+
+        assert.equal(animations.length, 2);
+        assert.true(animations[0] instanceof CSSTransition);
+        assert.equal(animations[0].transitionProperty, 'margin-left');
+        assert.equal(animations[0].playState, 'finished');
+      });
+
+      test('a specific css transitions', async function (assert) {
+        assert.expect(4);
+
+        await waitForFrame();
+
+        this.parent.classList.add('transition');
+
+        const animations = await waitForAnimation(this.parent, {
+          transitionProperty: 'transform'
+        });
 
         assert.equal(animations.length, 1);
         assert.true(animations[0] instanceof CSSTransition);
@@ -158,26 +193,16 @@
         assert.equal(animations[0].playState, 'finished');
       });
 
-      test('thenable', function (assert) {
-        assert.expect(1);
-
-        this.parent.classList.add('animation1');
-
-        return waitForAnimation(this.parent).then((animations) => {
-          assert.equal(animations[0].animationName, 'move-right');
-        });
-      });
-
       test('child animations', async function (assert) {
         assert.expect(4);
 
-        this.child.classList.add('animation1');
+        this.child.classList.add('animate');
 
         const animations = await waitForAnimation(this.parent, {
           subtree: true
         });
 
-        assert.equal(animations.length, 1);
+        assert.equal(animations.length, 2);
         assert.true(animations[0] instanceof CSSAnimation);
         assert.equal(animations[0].animationName, 'move-right');
         assert.equal(animations[0].playState, 'finished');
@@ -186,7 +211,7 @@
       test('multiple animations', async function (assert) {
         assert.expect(7);
 
-        this.parent.classList.add('animation2');
+        this.parent.classList.add('animate');
 
         const animations = await waitForAnimation(this.parent);
 
@@ -202,15 +227,25 @@
       test('aborted transitions', async function (assert) {
         assert.expect(0);
 
-        this.parent.classList.add('transition1');
+        this.parent.classList.add('transition');
 
         const promise = waitForAnimation(this.parent);
 
         await waitForFrame();
 
-        this.parent.classList.remove('transition1');
+        this.parent.classList.remove('transition');
 
         await promise;
+      });
+
+      test('thenable', function (assert) {
+        assert.expect(1);
+
+        this.parent.classList.add('animate');
+
+        return waitForAnimation(this.parent).then((animations) => {
+          assert.equal(animations[0].animationName, 'move-right');
+        });
       });
     });
   </script>
