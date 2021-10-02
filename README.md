@@ -16,6 +16,9 @@ await waitForAnimation(myElement, { animationName: 'fade-out' });
 
 // Wait for a specific transition to end
 await waitForAnimation(myElement, { transitionProperty: 'margin-left' });
+
+// Wait for a specific animations to finish in a child element
+await waitForAnimation(element, { subtree: true, animationName: 'move' });
 ```
 
 ## waitForFrame
