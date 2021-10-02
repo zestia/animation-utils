@@ -108,28 +108,28 @@
     const { isArray } = Array;
 
     function keyForAnimation(animation) {
-      return animation instanceof CSSAnimation
-        ? 'animationName'
-        : 'transitionProperty';
+      const id = animation.effect.target.getAttribute('id');
+
+      const prop =
+        animation[
+          animation instanceof CSSAnimation
+            ? 'animationName'
+            : 'transitionProperty'
+        ];
+
+      return prop ? `#${id} → ${prop}` : `#${id}`;
     }
 
     QUnit.assert.animated = function (actual, expected) {
       this.pushResult({
+        expected: actual.map(keyForAnimation),
         result: actual.reduce((result, animation, index) => {
           return (
             result &&
             animation.playState === 'finished' &&
-            animation.effect.target === expected[index][0] &&
-            animation[keyForAnimation(animation)] === expected[index][1]
+            keyForAnimation(animation) === expected[index]
           );
-        }, actual.length === expected.length),
-
-        expected: actual.map((animation) => {
-          return [
-            animation.effect.target,
-            animation[keyForAnimation(animation)]
-          ];
-        })
+        }, actual.length === expected.length)
       });
     };
 
@@ -151,8 +151,8 @@
         const animations = await waitForAnimation(this.parent);
 
         assert.animated(animations, [
-          [this.parent, 'move-right'],
-          [this.parent, 'move-down']
+          '#test-parent → move-right',
+          '#test-parent → move-down'
         ]);
       });
 
@@ -165,7 +165,7 @@
           animationName: 'move-down'
         });
 
-        assert.animated(animations, [[this.parent, 'move-down']]);
+        assert.animated(animations, ['#test-parent → move-down']);
       });
 
       test('css transitions', async function (assert) {
@@ -176,8 +176,8 @@
         const animations = await waitForAnimation(this.parent);
 
         assert.animated(animations, [
-          [this.parent, 'margin-left'],
-          [this.parent, 'transform']
+          '#test-parent → margin-left',
+          '#test-parent → transform'
         ]);
       });
 
@@ -190,7 +190,7 @@
           transitionProperty: 'transform'
         });
 
-        assert.animated(animations, [[this.parent, 'transform']]);
+        assert.animated(animations, ['#test-parent → transform']);
       });
 
       test('js animations', async function (assert) {
@@ -208,7 +208,7 @@
 
         const animations = await waitForAnimation(this.parent);
 
-        assert.animated(animations, [[this.parent, undefined]]);
+        assert.animated(animations, ['#test-parent']);
       });
 
       test('child animations', async function (assert) {
@@ -221,8 +221,8 @@
         });
 
         assert.animated(animations, [
-          [this.child, 'move-right'],
-          [this.child, 'move-down']
+          '#test-child → move-right',
+          '#test-child → move-down'
         ]);
       });
 
@@ -236,7 +236,7 @@
           animationName: 'move-down'
         });
 
-        assert.animated(animations, [[this.child, 'move-down']]);
+        assert.animated(animations, ['#test-child → move-down']);
       });
 
       test('a specific child transition', async function (assert) {
@@ -249,7 +249,7 @@
           transitionProperty: 'transform'
         });
 
-        assert.animated(animations, [[this.child, 'transform']]);
+        assert.animated(animations, ['#test-child → transform']);
       });
 
       test('multiple animations', async function (assert) {
@@ -263,10 +263,10 @@
         });
 
         assert.animated(animations, [
-          [this.child, 'margin-left'],
-          [this.child, 'transform'],
-          [this.parent, 'move-right'],
-          [this.parent, 'move-down']
+          '#test-child → margin-left',
+          '#test-child → transform',
+          '#test-parent → move-right',
+          '#test-parent → move-down'
         ]);
       });
 
@@ -294,8 +294,8 @@
         const animations = await promise;
 
         assert.animated(animations, [
-          [this.parent, 'move-right'],
-          [this.parent, 'move-down']
+          '#test-parent → move-right',
+          '#test-parent → move-down'
         ]);
       });
 
@@ -329,8 +329,8 @@
 
         return waitForAnimation(this.parent).then((animations) => {
           assert.animated(animations, [
-            [this.parent, 'move-right'],
-            [this.parent, 'move-down']
+            '#test-parent → move-right',
+            '#test-parent → move-down'
           ]);
         });
       });
