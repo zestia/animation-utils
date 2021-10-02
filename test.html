@@ -226,7 +226,7 @@
         ]);
       });
 
-      test('a specific child animation', async function (assert) {
+      test('a specific animation (including children)', async function (assert) {
         assert.expect(1);
 
         this.child.classList.add('animate');
@@ -239,7 +239,7 @@
         assert.animated(animations, ['#test-child → move-down']);
       });
 
-      test('a specific child transition', async function (assert) {
+      test('a specific transition (including children)', async function (assert) {
         assert.expect(1);
 
         this.child.classList.add('transition');
