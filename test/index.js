@@ -82,7 +82,17 @@ module('waitForAnimation', function (hooks) {
     assert.animated(animations, ['#test-element']);
   });
 
-  test('child animations', async function (assert) {
+  test('child animations are ignored', async function (assert) {
+    assert.expect(1);
+
+    this.child.classList.add('animate');
+
+    const animations = await waitForAnimation(this.element);
+
+    assert.animated(animations, []);
+  });
+
+  test('child animations are waited on', async function (assert) {
     assert.expect(1);
 
     this.child.classList.add('animate');
@@ -123,7 +133,7 @@ module('waitForAnimation', function (hooks) {
     assert.animated(animations, ['#test-child → transform']);
   });
 
-  test('multiple animations', async function (assert) {
+  test('multiple elements', async function (assert) {
     assert.expect(1);
 
     this.element.classList.add('animate');
