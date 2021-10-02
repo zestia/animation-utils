@@ -5,10 +5,10 @@ Utils for working with animations and transitions.
 ## waitForAnimation
 
 ```javascript
-// Wait for all current animations to finish
+// Wait for animations to finish
 await waitForAnimation(element);
 
-// Wait for all current animations to finish, including children
+// Wait for animations to finish, including children
 await waitForAnimation(element, { subtree: true });
 
 // Wait for a specific animation to end
@@ -17,7 +17,7 @@ await waitForAnimation(myElement, { animationName: 'fade-out' });
 // Wait for a specific transition to end
 await waitForAnimation(myElement, { transitionProperty: 'margin-left' });
 
-// Wait for a specific animations to finish in a child element
+// Wait for a specific animation to finish in a child element
 await waitForAnimation(element, { subtree: true, animationName: 'move' });
 ```
 

@@ -118,16 +118,21 @@
       });
 
       test('css animations', async function (assert) {
-        assert.expect(4);
+        assert.expect(7);
 
         this.parent.classList.add('animate');
 
         const animations = await waitForAnimation(this.parent);
 
         assert.equal(animations.length, 2);
+
         assert.true(animations[0] instanceof CSSAnimation);
         assert.equal(animations[0].animationName, 'move-right');
         assert.equal(animations[0].playState, 'finished');
+
+        assert.true(animations[1] instanceof CSSAnimation);
+        assert.equal(animations[1].animationName, 'move-down');
+        assert.equal(animations[1].playState, 'finished');
       });
 
       test('a specific css animation', async function (assert) {
@@ -140,13 +145,14 @@
         });
 
         assert.equal(animations.length, 1);
+
         assert.true(animations[0] instanceof CSSAnimation);
         assert.equal(animations[0].animationName, 'move-down');
         assert.equal(animations[0].playState, 'finished');
       });
 
       test('css transitions', async function (assert) {
-        assert.expect(4);
+        assert.expect(7);
 
         await waitForFrame();
 
@@ -155,9 +161,14 @@
         const animations = await waitForAnimation(this.parent);
 
         assert.equal(animations.length, 2);
+
         assert.true(animations[0] instanceof CSSTransition);
         assert.equal(animations[0].transitionProperty, 'margin-left');
         assert.equal(animations[0].playState, 'finished');
+
+        assert.true(animations[1] instanceof CSSTransition);
+        assert.equal(animations[1].transitionProperty, 'transform');
+        assert.equal(animations[1].playState, 'finished');
       });
 
       test('a specific css transition', async function (assert) {
@@ -198,7 +209,7 @@
       });
 
       test('child animations', async function (assert) {
-        assert.expect(4);
+        assert.expect(7);
 
         this.child.classList.add('animate');
 
@@ -207,9 +218,14 @@
         });
 
         assert.equal(animations.length, 2);
+
         assert.true(animations[0] instanceof CSSAnimation);
         assert.equal(animations[0].animationName, 'move-right');
         assert.equal(animations[0].playState, 'finished');
+
+        assert.true(animations[1] instanceof CSSAnimation);
+        assert.equal(animations[1].animationName, 'move-down');
+        assert.equal(animations[1].playState, 'finished');
       });
 
       test('a specific child animation', async function (assert) {
@@ -245,19 +261,35 @@
       });
 
       test('multiple animations', async function (assert) {
-        assert.expect(7);
+        assert.expect(17);
 
         this.parent.classList.add('animate');
+        this.child.classList.add('animate');
 
-        const animations = await waitForAnimation(this.parent);
+        const animations = await waitForAnimation(this.parent, {
+          subtree: true
+        });
 
-        assert.equal(animations.length, 2);
+        assert.equal(animations.length, 4);
         assert.true(animations[0] instanceof CSSAnimation);
         assert.equal(animations[0].animationName, 'move-right');
         assert.equal(animations[0].playState, 'finished');
+        assert.deepEqual(animations[0].effect.target, this.parent);
+
         assert.true(animations[1] instanceof CSSAnimation);
         assert.equal(animations[1].animationName, 'move-down');
         assert.equal(animations[1].playState, 'finished');
+        assert.deepEqual(animations[1].effect.target, this.parent);
+
+        assert.true(animations[2] instanceof CSSAnimation);
+        assert.equal(animations[2].animationName, 'move-right');
+        assert.equal(animations[2].playState, 'finished');
+        assert.deepEqual(animations[2].effect.target, this.child);
+
+        assert.true(animations[3] instanceof CSSAnimation);
+        assert.equal(animations[3].animationName, 'move-down');
+        assert.equal(animations[3].playState, 'finished');
+        assert.deepEqual(animations[3].effect.target, this.child);
       });
 
       test('aborted transitions', async function (assert) {

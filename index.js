@@ -22,9 +22,7 @@ export async function waitForAnimation(element, options = {}) {
           // squelch aborted animations
         });
       })
-  ).then((animations) => {
-    console.log(animations);
-  });
+  );
 }
 
 export function waitForFrame() {
