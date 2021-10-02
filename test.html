@@ -71,7 +71,10 @@
 
   <script>
     async function waitForAnimation(element, options = {}) {
-      await waitForFrame();
+      // while (element.getAnimations().length < 1) {
+      //   console.log(element.getAnimations().length);
+      //   await waitForFrame();
+      // }
 
       return Promise.all(
         element
@@ -205,6 +208,22 @@
         assert.true(animations[1] instanceof CSSAnimation);
         assert.equal(animations[1].animationName, 'move-down');
         assert.equal(animations[1].playState, 'finished');
+      });
+
+      test('aborted transitions', async function (assert) {
+        assert.expect(0);
+
+        await waitForFrame();
+
+        this.parent.classList.add('transition');
+
+        const promise = waitForAnimation(this.parent);
+
+        await waitForFrame();
+
+        this.parent.classList.remove('transition');
+
+        await promise;
       });
     });
   </script>
