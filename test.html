@@ -19,23 +19,23 @@
     }
 
     #test-parent {
+      position: absolute;
       background-color: red;
       width: 100px;
       height: 100px;
-    }
-
-    #test-child {
-      background-color: blue;
-      width: 50px;
-      height: 50px;
-    }
-
-    #test-parent,
-    #test-child {
-      position: absolute;
       transition-property: margin-left, transform;
       transition-duration: 500ms;
       animation-duration: 500ms;
+    }
+
+    #test-child {
+      position: absolute;
+      background-color: blue;
+      width: 50px;
+      height: 50px;
+      transition-property: margin-left, transform;
+      transition-duration: 250ms;
+      animation-duration: 250ms;
     }
 
     .animate {
@@ -255,8 +255,8 @@
       test('multiple animations', async function (assert) {
         assert.expect(1);
 
-        this.child.classList.add('transition');
         this.parent.classList.add('animate');
+        this.child.classList.add('transition');
 
         const animations = await waitForAnimation(this.parent, {
           subtree: true
