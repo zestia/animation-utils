@@ -272,6 +272,18 @@
         await promise;
       });
 
+      test('animation not started yet (does not use events system)', async function (assert) {
+        assert.expect(1);
+
+        const promise = waitForAnimation(this.parent);
+
+        this.parent.classList.add('animate');
+
+        const animations = await promise;
+
+        assert.equal(animations.length, 0);
+      });
+
       test('thenable', function (assert) {
         assert.expect(1);
 
