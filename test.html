@@ -69,7 +69,7 @@
   </style>
 
   <script>
-    async function waitForAnimation(element, options = {}) {
+    function waitForAnimation(element, options = {}) {
       return Promise.all(
         element
           .getAnimations({
@@ -80,11 +80,13 @@
               return (
                 animation.transitionProperty === options.transitionProperty
               );
-            } else if (options.animationName) {
-              return animation.animationName === options.animationName;
-            } else {
-              return true;
             }
+
+            if (options.animationName) {
+              return animation.animationName === options.animationName;
+            }
+
+            return true;
           })
           .map((animation) => {
             return animation.finished.catch(() => {
