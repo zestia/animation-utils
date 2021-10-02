@@ -67,11 +67,6 @@
 
   <script>
     async function waitForAnimation(element, options = {}) {
-      // while (element.getAnimations().length < 1) {
-      //   console.log(element.getAnimations().length);
-      //   await waitForFrame();
-      // }
-
       return Promise.all(
         element
           .getAnimations({
@@ -182,8 +177,6 @@
           subtree: true
         });
 
-        console.log(animations);
-
         assert.equal(animations.length, 1);
         assert.true(animations[0] instanceof CSSAnimation);
         assert.equal(animations[0].animationName, 'move-right');
@@ -196,8 +189,6 @@
         this.parent.classList.add('animation2');
 
         const animations = await waitForAnimation(this.parent);
-
-        console.log(animations);
 
         assert.equal(animations.length, 2);
         assert.true(animations[0] instanceof CSSAnimation);
