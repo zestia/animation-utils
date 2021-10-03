@@ -3,7 +3,8 @@
   "version": "2.0.0",
   "description": "Basic utils for dealing with animations & transitions",
   "scripts": {
-    "test": "npm run lint:js && testem ci",
+    "test": "npm run lint && testem ci",
+    "lint": "npm run lint:js && npm run lint:css",
     "lint:js": "eslint .",
     "lint:css": "stylelint '**/*.css'",
     "prettier": "prettier . --write",
