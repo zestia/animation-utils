@@ -83,7 +83,7 @@ module('waitForAnimation', function (hooks) {
     assert.animated(animations, ['#test-element']);
   });
 
-  test('child animations are ignored', async function (assert) {
+  test('animations of descendants are ignored', async function (assert) {
     assert.expect(1);
 
     child.classList.add('animate');
@@ -93,7 +93,7 @@ module('waitForAnimation', function (hooks) {
     assert.animated(animations, []);
   });
 
-  test('child animations are waited on', async function (assert) {
+  test('animations of descendants are waited on', async function (assert) {
     assert.expect(1);
 
     child.classList.add('animate');
@@ -108,7 +108,7 @@ module('waitForAnimation', function (hooks) {
     ]);
   });
 
-  test('a specific animation (including children)', async function (assert) {
+  test('a specific animation (including descendants)', async function (assert) {
     assert.expect(1);
 
     child.classList.add('animate');
@@ -121,7 +121,7 @@ module('waitForAnimation', function (hooks) {
     assert.animated(animations, ['#test-child → move-down']);
   });
 
-  test('a specific transition (including children)', async function (assert) {
+  test('a specific transition (including descendants)', async function (assert) {
     assert.expect(1);
 
     child.classList.add('transition');
