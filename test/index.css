@@ -1,10 +1,17 @@
+/* stylelint-disable selector-max-id */
+
+:root {
+  --red: red;
+  --blue: blue;
+}
+
 #qunit-fixture {
   position: static;
 }
 
 #test-element {
   position: absolute;
-  background-color: red;
+  background-color: var(--blue);
   width: 100px;
   height: 100px;
   transition-property: margin-left, transform;
@@ -14,7 +21,7 @@
 
 #test-child {
   position: absolute;
-  background-color: blue;
+  background-color: var(--red);
   width: 50px;
   height: 50px;
   transition-property: margin-left, transform;
