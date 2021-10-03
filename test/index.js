@@ -4,13 +4,11 @@ const {
   QUnit: { module, test }
 } = window;
 
-module('waitForAnimation', function (hooks) {
-  let element;
-  let child;
+const element = document.getElementById('test-element');
+const child = document.getElementById('test-child');
 
+module('waitForAnimation', function (hooks) {
   hooks.beforeEach(async function () {
-    element = document.getElementById('test-element');
-    child = document.getElementById('test-child');
     element.className = '';
     child.className = '';
 
