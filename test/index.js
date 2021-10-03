@@ -11,8 +11,6 @@ module('waitForAnimation', function (hooks) {
   hooks.beforeEach(async function () {
     element = document.getElementById('test-element');
     child = document.getElementById('test-child');
-    element.className = '';
-    child.className = '';
 
     await waitForFrame();
   });
