@@ -152,6 +152,23 @@ module('waitForAnimation', function (hooks) {
     ]);
   });
 
+  test('multiple specific animations', async function (assert) {
+    assert.expect(1);
+
+    element.classList.add('animate');
+    child.classList.add('animate');
+
+    const animations = await waitForAnimation(element, {
+      subtree: true,
+      animationName: 'move-down'
+    });
+
+    assert.animated(animations, [
+      '#test-element → move-down',
+      '#test-child → move-down'
+    ]);
+  });
+
   test('aborted transitions', async function (assert) {
     assert.expect(0);
 
