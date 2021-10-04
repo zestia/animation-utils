@@ -221,6 +221,17 @@ module('waitForAnimation', function (hooks) {
     assert.animated(animations, []);
   });
 
+  test('no specific animation', async function (assert) {
+    assert.expect(1);
+    assert.timeout(1000);
+
+    const animations = await waitForAnimation(element, {
+      animationName: 'move-up'
+    });
+
+    assert.animated(animations, []);
+  });
+
   test('thenable', function (assert) {
     assert.expect(1);
 
