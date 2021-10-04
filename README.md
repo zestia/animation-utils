@@ -8,7 +8,7 @@ Utils for working with animations and transitions.
 // Wait for animations to finish
 await waitForAnimation(element);
 
-// Wait for animations to finish, including children
+// Wait for animations to finish, including descendants
 await waitForAnimation(element, { subtree: true });
 
 // Wait for a specific animation to end
@@ -17,7 +17,7 @@ await waitForAnimation(myElement, { animationName: 'fade-out' });
 // Wait for a specific transition to end
 await waitForAnimation(myElement, { transitionProperty: 'margin-left' });
 
-// Wait for a specific animation to finish, including children
+// Wait for a specific animation to finish, including descendants
 await waitForAnimation(element, { subtree: true, animationName: 'move' });
 ```
 
