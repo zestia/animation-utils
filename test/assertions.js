@@ -1,6 +1,6 @@
 const { QUnit, CSSAnimation } = window;
 
-QUnit.assert.animated = function (actual, expected) {
+QUnit.assert.animated = function (actual = [], expected = []) {
   this.pushResult({
     expected: actual.map(keyForAnimation),
     result: actual.reduce((result, animation, index) => {

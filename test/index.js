@@ -15,7 +15,7 @@ module('waitForAnimation', function (hooks) {
     await waitForFrame();
   });
 
-  test('css animations', async function (assert) {
+  test('waits for css animations', async function (assert) {
     assert.expect(1);
 
     element.classList.add('animate');
@@ -28,7 +28,7 @@ module('waitForAnimation', function (hooks) {
     ]);
   });
 
-  test('a specific css animation', async function (assert) {
+  test('waits for a specific css animation', async function (assert) {
     assert.expect(1);
 
     element.classList.add('animate');
@@ -40,7 +40,7 @@ module('waitForAnimation', function (hooks) {
     assert.animated(animations, ['#test-element → move-down']);
   });
 
-  test('css transitions', async function (assert) {
+  test('waits for css transitions', async function (assert) {
     assert.expect(1);
 
     element.classList.add('transition');
@@ -53,7 +53,7 @@ module('waitForAnimation', function (hooks) {
     ]);
   });
 
-  test('a specific css transition', async function (assert) {
+  test('waits for a specific css transition', async function (assert) {
     assert.expect(1);
 
     element.classList.add('transition');
@@ -65,7 +65,7 @@ module('waitForAnimation', function (hooks) {
     assert.animated(animations, ['#test-element → transform']);
   });
 
-  test('js animations', async function (assert) {
+  test('waits for js animations', async function (assert) {
     assert.expect(1);
 
     element.animate(
@@ -83,7 +83,7 @@ module('waitForAnimation', function (hooks) {
     assert.animated(animations, ['#test-element']);
   });
 
-  test('animations of descendants are ignored', async function (assert) {
+  test('does not wait for animations of descendants', async function (assert) {
     assert.expect(1);
 
     child.classList.add('animate');
@@ -93,7 +93,7 @@ module('waitForAnimation', function (hooks) {
     assert.animated(animations, []);
   });
 
-  test('animations of descendants are waited on', async function (assert) {
+  test('waits for animations of descendants', async function (assert) {
     assert.expect(1);
 
     child.classList.add('animate');
@@ -108,7 +108,7 @@ module('waitForAnimation', function (hooks) {
     ]);
   });
 
-  test('a specific animation (including descendants)', async function (assert) {
+  test('waits a specific animation (including descendants)', async function (assert) {
     assert.expect(1);
 
     child.classList.add('animate');
@@ -121,7 +121,7 @@ module('waitForAnimation', function (hooks) {
     assert.animated(animations, ['#test-child → move-down']);
   });
 
-  test('a specific transition (including descendants)', async function (assert) {
+  test('waits for a specific transition (including descendants)', async function (assert) {
     assert.expect(1);
 
     child.classList.add('transition');
@@ -134,7 +134,7 @@ module('waitForAnimation', function (hooks) {
     assert.animated(animations, ['#test-child → transform']);
   });
 
-  test('multiple elements', async function (assert) {
+  test('waits for animations of multiple elements', async function (assert) {
     assert.expect(1);
 
     element.classList.add('animate');
@@ -152,7 +152,7 @@ module('waitForAnimation', function (hooks) {
     ]);
   });
 
-  test('multiple specific animations', async function (assert) {
+  test('waits for specific animations of multiple elements', async function (assert) {
     assert.expect(1);
 
     element.classList.add('animate');
@@ -169,21 +169,7 @@ module('waitForAnimation', function (hooks) {
     ]);
   });
 
-  test('aborted transitions', async function (assert) {
-    assert.expect(0);
-
-    element.classList.add('transition');
-
-    const promise = waitForAnimation(element);
-
-    await waitForFrame();
-
-    element.classList.remove('transition');
-
-    await promise;
-  });
-
-  test('animation not started yet', async function (assert) {
+  test('waits for animation frame before waiting for animations', async function (assert) {
     assert.expect(1);
 
     const promise = waitForAnimation(element);
@@ -198,21 +184,7 @@ module('waitForAnimation', function (hooks) {
     ]);
   });
 
-  test('animation not started yet (opportunity to start)', async function (assert) {
-    assert.expect(1);
-
-    const promise = waitForAnimation(element);
-
-    await waitForFrame();
-
-    element.classList.add('animate');
-
-    const animations = await promise;
-
-    assert.animated(animations, []);
-  });
-
-  test('no animation does not result in a never ending promise', async function (assert) {
+  test('does not wait indefinitely if the element does not animate', async function (assert) {
     assert.expect(1);
     assert.timeout(1000);
 
@@ -221,26 +193,27 @@ module('waitForAnimation', function (hooks) {
     assert.animated(animations, []);
   });
 
-  test('no specific animation', async function (assert) {
-    assert.expect(1);
+  test('squelches aborted transitions', async function (assert) {
+    assert.expect(0);
 
-    const animations = await waitForAnimation(element, {
-      animationName: 'move-up'
-    });
+    element.classList.add('transition');
 
-    assert.animated(animations, []);
+    const promise = waitForAnimation(element);
+
+    await waitForFrame();
+
+    element.classList.remove('transition');
+
+    await promise;
   });
 
-  test('thenable', function (assert) {
+  test('squelches no web animation api support', async function (assert) {
     assert.expect(1);
 
-    element.classList.add('animate');
+    element.getAnimations = null;
 
-    return waitForAnimation(element).then((animations) => {
-      assert.animated(animations, [
-        '#test-element → move-right',
-        '#test-element → move-down'
-      ]);
-    });
+    const animations = await waitForAnimation(element);
+
+    assert.animated(animations, []);
   });
 });

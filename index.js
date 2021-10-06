@@ -1,4 +1,8 @@
 export async function waitForAnimation(element, options = {}) {
+  if (!element.getAnimations) {
+    return;
+  }
+
   await waitForFrame();
 
   return Promise.all(

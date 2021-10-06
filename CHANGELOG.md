@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.0.1
+
+- Suppress errors if no Web Animations API support
+
 ## 3.0.0
 
 - Switch from events system to Web Animations API
