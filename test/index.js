@@ -198,14 +198,14 @@ module('waitForAnimation', function (hooks) {
     ]);
   });
 
-  test('animation not started yet (does not use events system)', async function (assert) {
+  test('animation not started yet (opportunity to start)', async function (assert) {
     assert.expect(1);
 
     const promise = waitForAnimation(element);
 
-    setTimeout(() => {
-      element.classList.add('animate');
-    }, 100);
+    await waitForFrame();
+
+    element.classList.add('animate');
 
     const animations = await promise;
 
@@ -223,7 +223,6 @@ module('waitForAnimation', function (hooks) {
 
   test('no specific animation', async function (assert) {
     assert.expect(1);
-    assert.timeout(1000);
 
     const animations = await waitForAnimation(element, {
       animationName: 'move-up'
