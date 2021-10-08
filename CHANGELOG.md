@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.0.2
+
+- Reduce node version requirements
+
 ## 3.0.1
 
 - Suppress errors if no Web Animations API support
