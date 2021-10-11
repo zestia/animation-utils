@@ -12,10 +12,10 @@ await waitForAnimation(element);
 await waitForAnimation(element, { subtree: true });
 
 // Wait for an animation to finish by name
-await waitForAnimation(myElement, { animationName: 'fade-out' });
+await waitForAnimation(element, { animationName: 'fade-out' });
 
 // Wait for a transition to finish by name
-await waitForAnimation(myElement, { transitionProperty: 'margin-left' });
+await waitForAnimation(element, { transitionProperty: 'margin-left' });
 
 // Wait for an animation to finish by name, including descendants
 await waitForAnimation(element, { subtree: true, animationName: 'move' });
