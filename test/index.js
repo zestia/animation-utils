@@ -28,7 +28,7 @@ module('waitForAnimation', function (hooks) {
     ]);
   });
 
-  test('waits for a specific css animation', async function (assert) {
+  test('waits for an animation by name', async function (assert) {
     assert.expect(1);
 
     element.classList.add('animate');
@@ -53,7 +53,7 @@ module('waitForAnimation', function (hooks) {
     ]);
   });
 
-  test('waits for a specific css transition', async function (assert) {
+  test('waits for a css transition by name', async function (assert) {
     assert.expect(1);
 
     element.classList.add('transition');
@@ -108,7 +108,7 @@ module('waitForAnimation', function (hooks) {
     ]);
   });
 
-  test('waits a specific animation (including descendants)', async function (assert) {
+  test('waits for animations by name, including descendants', async function (assert) {
     assert.expect(1);
 
     child.classList.add('animate');
@@ -121,7 +121,7 @@ module('waitForAnimation', function (hooks) {
     assert.animated(animations, ['#test-child → move-down']);
   });
 
-  test('waits for a specific transition (including descendants)', async function (assert) {
+  test('waits for a transition by name, including descendants', async function (assert) {
     assert.expect(1);
 
     child.classList.add('transition');
@@ -132,41 +132,6 @@ module('waitForAnimation', function (hooks) {
     });
 
     assert.animated(animations, ['#test-child → transform']);
-  });
-
-  test('waits for animations of multiple elements', async function (assert) {
-    assert.expect(1);
-
-    element.classList.add('animate');
-    child.classList.add('transition');
-
-    const animations = await waitForAnimation(element, {
-      subtree: true
-    });
-
-    assert.animated(animations, [
-      '#test-child → margin-left',
-      '#test-child → transform',
-      '#test-element → move-right',
-      '#test-element → move-down'
-    ]);
-  });
-
-  test('waits for specific animations of multiple elements', async function (assert) {
-    assert.expect(1);
-
-    element.classList.add('animate');
-    child.classList.add('animate');
-
-    const animations = await waitForAnimation(element, {
-      subtree: true,
-      animationName: 'move-down'
-    });
-
-    assert.animated(animations, [
-      '#test-element → move-down',
-      '#test-child → move-down'
-    ]);
   });
 
   test('waits for animation frame before waiting for animations', async function (assert) {

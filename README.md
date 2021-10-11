@@ -11,13 +11,13 @@ await waitForAnimation(element);
 // Wait for animations to finish, including descendants
 await waitForAnimation(element, { subtree: true });
 
-// Wait for a specific animation to end
+// Wait for an animation to finish by name
 await waitForAnimation(myElement, { animationName: 'fade-out' });
 
-// Wait for a specific transition to end
+// Wait for a transition to finish by name
 await waitForAnimation(myElement, { transitionProperty: 'margin-left' });
 
-// Wait for a specific animation to finish, including descendants
+// Wait for an animation to finish by name, including descendants
 await waitForAnimation(element, { subtree: true, animationName: 'move' });
 ```
 
