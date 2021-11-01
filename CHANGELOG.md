@@ -2,7 +2,7 @@
 
 ## 3.0.3
 
-- Add `.npmignore`
+- Only publish necessary code
 
 ## 3.0.2
 
