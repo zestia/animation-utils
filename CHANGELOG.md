@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.0.3
+
+- Add `.npmignore`
+
 ## 3.0.2
 
 - Reduce node version requirements
