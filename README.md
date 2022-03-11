@@ -20,12 +20,3 @@ await waitForAnimation(element, { transitionProperty: 'margin-left' });
 // Wait for an animation to finish by name, including descendants
 await waitForAnimation(element, { subtree: true, animationName: 'move' });
 ```
-
-## waitForFrame
-
-```javascript
-// Ensure the styles are changed in the next paint
-element.style.maxHeight = 100;
-await waitForFrame();
-element.style.maxHeight = 0;
-```

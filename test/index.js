@@ -1,4 +1,4 @@
-import { waitForAnimation, waitForFrame } from '../index.js';
+import { waitForAnimation } from '../index.js';
 
 const {
   QUnit: { module, test }
@@ -7,12 +7,12 @@ const {
 module('waitForAnimation', function (hooks) {
   let element;
   let child;
+  let draw;
 
-  hooks.beforeEach(async function () {
+  hooks.beforeEach(function () {
     element = document.getElementById('test-element');
     child = document.getElementById('test-child');
-
-    await waitForFrame();
+    draw = () => element.getBoundingClientRect();
   });
 
   test('waits for css animations', async function (assert) {
@@ -43,6 +43,8 @@ module('waitForAnimation', function (hooks) {
   test('waits for css transitions', async function (assert) {
     assert.expect(1);
 
+    draw();
+
     element.classList.add('transition');
 
     const animations = await waitForAnimation(element);
@@ -55,6 +57,8 @@ module('waitForAnimation', function (hooks) {
 
   test('waits for a css transition by name', async function (assert) {
     assert.expect(1);
+
+    draw();
 
     element.classList.add('transition');
 
@@ -124,6 +128,8 @@ module('waitForAnimation', function (hooks) {
   test('waits for a transition by name, including descendants', async function (assert) {
     assert.expect(1);
 
+    draw();
+
     child.classList.add('transition');
 
     const animations = await waitForAnimation(element, {
@@ -132,21 +138,6 @@ module('waitForAnimation', function (hooks) {
     });
 
     assert.animated(animations, ['#test-child → transform']);
-  });
-
-  test('waits for animation frame before waiting for animations', async function (assert) {
-    assert.expect(1);
-
-    const promise = waitForAnimation(element);
-
-    element.classList.add('animate');
-
-    const animations = await promise;
-
-    assert.animated(animations, [
-      '#test-element → move-right',
-      '#test-element → move-down'
-    ]);
   });
 
   test('does not use events system', async function (assert) {
@@ -178,8 +169,6 @@ module('waitForAnimation', function (hooks) {
     element.classList.add('transition');
 
     const promise = waitForAnimation(element);
-
-    await waitForFrame();
 
     element.classList.remove('transition');
 

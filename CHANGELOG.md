@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.0.0
+
+- Remove `waitForFrame`
+
 ## 3.0.3
 
 - Only publish necessary code
