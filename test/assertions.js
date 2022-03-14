@@ -2,14 +2,16 @@ const { QUnit, CSSAnimation } = window;
 
 QUnit.assert.animated = function (actual = [], expected = []) {
   this.pushResult({
-    expected: actual.map(keyForAnimation),
-    result: actual.reduce((result, animation, index) => {
+    expected: actual.map((result) => {
+      return keyForAnimation(result.value);
+    }),
+
+    result: actual.every((result, index) => {
       return (
-        result &&
-        animation.playState === 'finished' &&
-        keyForAnimation(animation) === expected[index]
+        result.value.playState === 'finished' &&
+        keyForAnimation(result.value) === expected[index]
       );
-    }, actual.length === expected.length)
+    })
   });
 };
 

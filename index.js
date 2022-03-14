@@ -3,7 +3,7 @@ export function waitForAnimation(element, options = {}) {
     return;
   }
 
-  return Promise.all(
+  return Promise.allSettled(
     element
       .getAnimations({
         subtree: options.subtree
@@ -19,10 +19,6 @@ export function waitForAnimation(element, options = {}) {
 
         return true;
       })
-      .map((animation) => {
-        return animation.finished.catch(() => {
-          // squelch aborted animations
-        });
-      })
+      .map((animation) => animation.finished)
   );
 }

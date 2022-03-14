@@ -166,6 +166,8 @@ module('waitForAnimation', function (hooks) {
   test('squelches aborted transitions', async function (assert) {
     assert.expect(0);
 
+    draw();
+
     element.classList.add('transition');
 
     const promise = waitForAnimation(element);
