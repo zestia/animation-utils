@@ -4,6 +4,10 @@
 
 - Remove `waitForFrame`
 
+## 3.0.4
+
+- Upgrade dependencies
+
 ## 3.0.3
 
 - Only publish necessary code
