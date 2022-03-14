@@ -1,18 +1,15 @@
 const { QUnit, CSSAnimation } = window;
 
-QUnit.assert.animated = function (actual = [], expected = []) {
-  this.pushResult({
-    expected: actual.map((result) => {
-      return keyForAnimation(result.value);
-    }),
-
-    result: actual.every((result, index) => {
-      return (
-        result.value.playState === 'finished' &&
-        keyForAnimation(result.value) === expected[index]
-      );
-    })
+QUnit.assert.animated = function (_actual = [], expected = []) {
+  const actual = _actual.map((result) => {
+    return keyForAnimation(result.value);
   });
+
+  const result = expected.every((result, index) => {
+    return result === actual[index];
+  });
+
+  this.pushResult({ actual, expected, result });
 };
 
 function keyForAnimation(animation) {
