@@ -140,6 +140,21 @@ module('waitForAnimation', function (hooks) {
     assert.animated(animations, ['#test-child → transform']);
   });
 
+  test('waits for animation frame before waiting for animations', async function (assert) {
+    assert.expect(1);
+
+    const promise = waitForAnimation(element);
+
+    element.classList.add('animate');
+
+    const animations = await promise;
+
+    assert.animated(animations, [
+      '#test-element → move-right',
+      '#test-element → move-down'
+    ]);
+  });
+
   test('does not use events system', async function (assert) {
     assert.expect(1);
 

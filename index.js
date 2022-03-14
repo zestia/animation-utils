@@ -1,7 +1,9 @@
-export function waitForAnimation(element, options = {}) {
+export async function waitForAnimation(element, options = {}) {
   if (!element.getAnimations) {
     return;
   }
+
+  await waitForFrame();
 
   return Promise.allSettled(
     element
@@ -21,4 +23,8 @@ export function waitForAnimation(element, options = {}) {
       })
       .map((animation) => animation.finished)
   );
+}
+
+function waitForFrame() {
+  return new Promise(window.requestAnimationFrame);
 }

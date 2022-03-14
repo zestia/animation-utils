@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.1.0
+
+- Add back `waitForFrame`, but _no longer public_
+
 ## 4.0.0
 
 - Remove `waitForFrame`
