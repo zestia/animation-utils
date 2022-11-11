@@ -25,6 +25,6 @@ export async function waitForAnimation(element, options = {}) {
   );
 }
 
-function waitForFrame() {
+export function waitForFrame() {
   return new Promise(window.requestAnimationFrame);
 }
