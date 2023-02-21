@@ -8,7 +8,7 @@ Utils for working with animations and transitions.
 // Wait for animations to start and finish
 await waitForAnimation(element);
 
-// Wait for animations to finish
+// Wait for animations to finish, if there are any
 await waitForAnimation(element, { maybe: true });
 
 // Wait for animations to finish, including descendants

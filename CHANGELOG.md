@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.0.1
+
+- Update tests
+
 ## 5.0.0
 
 - Wait for animations to start if they haven't already.

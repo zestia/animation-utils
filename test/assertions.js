@@ -5,8 +5,8 @@ QUnit.assert.animated = function (_actual = [], expected = []) {
     return keyForAnimation(result.value);
   });
 
-  const result = expected.every((result, index) => {
-    return result === actual[index];
+  const result = actual.every((result, index) => {
+    return result === expected[index];
   });
 
   this.pushResult({ actual, expected, result });

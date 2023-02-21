@@ -5,6 +5,8 @@ export async function waitForAnimation(element, options = {}) {
 
   if (getAnimations().length < 1 && options.maybe !== true) {
     await waitForStart();
+  } else {
+    await waitForFrame();
   }
 
   return Promise.allSettled(
@@ -16,6 +18,10 @@ export async function waitForAnimation(element, options = {}) {
       element.addEventListener('animationstart', resolve, { once: true });
       element.addEventListener('transitionstart', resolve, { once: true });
     });
+  }
+
+  function waitForFrame() {
+    return new Promise(window.requestAnimationFrame);
   }
 
   function getAnimations() {
