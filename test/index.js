@@ -140,12 +140,14 @@ module('waitForAnimation', function (hooks) {
     assert.animated(animations, ['#test-child → transform']);
   });
 
-  test('waits for animation frame before waiting for animations', async function (assert) {
+  test('waits for animation to start before waiting for animations', async function (assert) {
     assert.expect(1);
 
     const promise = waitForAnimation(element);
 
-    element.classList.add('animate');
+    setTimeout(() => {
+      element.classList.add('animate');
+    }, 100);
 
     const animations = await promise;
 
@@ -173,7 +175,7 @@ module('waitForAnimation', function (hooks) {
     assert.expect(1);
     assert.timeout(1000);
 
-    const animations = await waitForAnimation(element);
+    const animations = await waitForAnimation(element, { maybe: true });
 
     assert.animated(animations, []);
   });

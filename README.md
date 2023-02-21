@@ -5,8 +5,11 @@ Utils for working with animations and transitions.
 ## waitForAnimation
 
 ```javascript
-// Wait for animations to finish
+// Wait for animations to start and finish
 await waitForAnimation(element);
+
+// Wait for animations to finish
+await waitForAnimation(element, { maybe: true });
 
 // Wait for animations to finish, including descendants
 await waitForAnimation(element, { subtree: true });

@@ -1,5 +1,10 @@
 # Changelog
 
+## 5.0.0
+
+- Wait for animations to start if they haven't already.
+- Optionally pass `{ maybe: true }` if the element may or may not animate
+
 ## 4.2.0
 
 - Export `waitForFrame` again
