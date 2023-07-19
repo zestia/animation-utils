@@ -1,4 +1,4 @@
-import { waitForAnimation } from '../index.js';
+import { waitForAnimation } from '../index.js'; // eslint-disable-line no-restricted-imports
 
 const {
   QUnit: { module, test }
