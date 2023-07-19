@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.0.2
+
+- Re-release of 5.0.1 but published to GH Packages instead of NPM
+
 ## 5.0.1
 
 - Update tests
