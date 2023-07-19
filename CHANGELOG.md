@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.0.4
+
+- Update `@zestia/eslint-config`
+
 ## 5.0.3
 
 - Update `@zestia` scoped packages
