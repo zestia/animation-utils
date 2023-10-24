@@ -2,6 +2,19 @@
 
 Utils for working with animations and transitions.
 
+## Installation
+
+```
+npm install --save-dev @zestia/animation-utils
+```
+
+Add the following to `~/.npmrc` to pull @zestia scoped packages from Github instead of NPM.
+
+```
+@zestia:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=<YOUR_GH_TOKEN>
+```
+
 ## waitForAnimation
 
 ```javascript
