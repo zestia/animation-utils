@@ -31,8 +31,8 @@ export async function waitForAnimation(element, options = {}) {
         return options.transitionProperty
           ? animation.transitionProperty === options.transitionProperty
           : options.animationName
-          ? animation.animationName === options.animationName
-          : true;
+            ? animation.animationName === options.animationName
+            : true;
       });
   }
 }

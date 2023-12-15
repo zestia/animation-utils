@@ -3,6 +3,7 @@
 :root {
   --red: red;
   --blue: blue;
+  --transformation: 100px;
 }
 
 #qunit-fixture {
@@ -34,8 +35,8 @@
 }
 
 .transition {
-  margin-left: 100px;
-  transform: translateY(100px);
+  margin-left: var(--transformation);
+  transform: translateY(var(--transformation));
 }
 
 @keyframes move-right {
@@ -44,7 +45,7 @@
   }
 
   to {
-    margin-left: 100px;
+    margin-left: var(--transformation);
   }
 }
 
@@ -54,6 +55,6 @@
   }
 
   to {
-    transform: translateY(100px);
+    transform: translateY(var(--transformation));
   }
 }
