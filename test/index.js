@@ -147,9 +147,9 @@ module('waitForAnimation', function (hooks) {
 
     const promise = waitForAnimation(element);
 
-    setTimeout(() => {
-      element.classList.add('animate');
-    }, 100);
+    await new Promise((resolve) => setTimeout(resolve, 250));
+
+    element.classList.add('animate');
 
     const animations = await promise;
 
