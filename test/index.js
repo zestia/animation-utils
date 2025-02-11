@@ -9,7 +9,9 @@ module('waitForAnimation', function (hooks) {
   let child;
   let draw;
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function (assert) {
+    assert.timeout(1000);
+
     element = document.getElementById('test-element');
     child = document.getElementById('test-child');
     draw = () => element.getBoundingClientRect();
