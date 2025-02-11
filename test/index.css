@@ -18,6 +18,7 @@
   transition-property: margin-left, transform;
   transition-duration: 500ms;
   animation-duration: 500ms;
+  animation-fill-mode: forwards;
 }
 
 #test-child {
@@ -28,6 +29,7 @@
   transition-property: margin-left, transform;
   transition-duration: 250ms;
   animation-duration: 250ms;
+  animation-fill-mode: forwards;
 }
 
 .animate {
