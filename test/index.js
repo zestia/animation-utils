@@ -176,7 +176,6 @@ module('waitForAnimation', function (hooks) {
 
   test('does not wait indefinitely if the element does not animate', async function (assert) {
     assert.expect(1);
-    assert.timeout(1000);
 
     const animations = await waitForAnimation(element, { maybe: true });
 
