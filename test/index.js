@@ -162,7 +162,7 @@ module('waitForAnimation', function (hooks) {
   test('waits 1 frame, for animations to start', async function (assert) {
     assert.expect(1);
 
-    const promise = waitForAnimation(element, { maybe: true });
+    const promise = waitForAnimation(element);
 
     element.classList.add('animate');
 
