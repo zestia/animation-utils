@@ -36,3 +36,8 @@ await waitForAnimation(element, { transitionProperty: 'margin-left' });
 // Wait for an animation to start and finish by name, including descendants
 await waitForAnimation(element, { subtree: true, animationName: 'move' });
 ```
+
+## Contributing
+
+- `npx testem` to run the tests in-browser
+- `npx testem ci` to run the tests in headless mode
