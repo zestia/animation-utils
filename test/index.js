@@ -7,14 +7,14 @@ const {
 module('waitForAnimation', function (hooks) {
   let element;
   let child;
-  let draw;
 
   hooks.beforeEach(function (assert) {
     assert.timeout(1000);
 
     element = document.getElementById('test-element');
     child = document.getElementById('test-child');
-    draw = () => element.getBoundingClientRect();
+
+    element.getBoundingClientRect(); // redraw
   });
 
   test('waits for css animations', async function (assert) {
@@ -45,8 +45,6 @@ module('waitForAnimation', function (hooks) {
   test('waits for css transitions', async function (assert) {
     assert.expect(1);
 
-    draw();
-
     element.classList.add('transition');
 
     const animations = await waitForAnimation(element);
@@ -59,8 +57,6 @@ module('waitForAnimation', function (hooks) {
 
   test('waits for a css transition by name', async function (assert) {
     assert.expect(1);
-
-    draw();
 
     element.classList.add('transition');
 
@@ -130,8 +126,6 @@ module('waitForAnimation', function (hooks) {
   test('waits for a transition by name, including descendants', async function (assert) {
     assert.expect(1);
 
-    draw();
-
     child.classList.add('transition');
 
     const animations = await waitForAnimation(element, {
@@ -184,8 +178,6 @@ module('waitForAnimation', function (hooks) {
 
   test('squelches aborted transitions', async function (assert) {
     assert.expect(0);
-
-    draw();
 
     element.classList.add('transition');
 
