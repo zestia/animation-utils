@@ -3,6 +3,7 @@
   "version": "5.0.5",
   "description": "Basic utils for dealing with animations & transitions",
   "scripts": {
+    "start": "testem",
     "test": "npm run lint && testem ci",
     "lint": "npm run lint:js && npm run lint:css && npm run lint:prettier",
     "lint:js": "eslint .",
