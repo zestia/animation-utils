@@ -15,8 +15,14 @@ export async function waitForAnimation(element, options = {}) {
 
   function waitForStart() {
     return new Promise((resolve) => {
-      element.addEventListener('animationstart', resolve, { once: true });
-      element.addEventListener('transitionstart', resolve, { once: true });
+      const handler = () => {
+        element.removeEventListener('animationstart', handler);
+        element.removeEventListener('transitionstart', handler);
+        resolve();
+      };
+
+      element.addEventListener('animationstart', handler, { once: true });
+      element.addEventListener('transitionstart', handler, { once: true });
     });
   }
 
