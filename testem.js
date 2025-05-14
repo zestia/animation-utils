@@ -6,7 +6,7 @@ module.exports = {
   port: 0,
   browser_args: {
     Chrome: {
-      ci: ['--headless']
+      ci: ['--headless', '--incognito']
     }
   }
 };
